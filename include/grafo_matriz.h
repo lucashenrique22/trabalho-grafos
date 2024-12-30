@@ -23,9 +23,14 @@ public:
     bool possui_ponte() const override;
     void carrega_grafo(const std::string& arquivo) override;
     void novo_grafo(const std::string& config) override;
+    void imprime_grafo() const;
 
 private:
     std::vector<std::vector<int>> matriz;
+    int ordem;
+    bool direcionado;
+    bool peso_arestas;
+    bool peso_vertices;
 };
 
 #endif // GRAFO_MATRIZ_H

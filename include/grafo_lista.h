@@ -28,6 +28,10 @@ public:
 
 private:
     std::vector<std::list<int>> lista;
+    int ordem;
+    bool direcionado;
+    bool peso_arestas;
+    bool peso_vertices;
 };
 
 #endif // GRAFO_LISTA_H
