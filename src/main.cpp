@@ -28,11 +28,11 @@ GrafoMatriz gerarGrafo(const std::string& file) {
 int main() {
     GrafoMatriz grafoMatriz = gerarGrafo("../grafo.txt");
 
-    // if (grafoMatriz.eh_bipartido()) {
-    //     std::cout << "O grafo é bipartido." << std::endl;
-    // } else {
-    //     std::cout << "O grafo não é bipartido." << std::endl;
-    // }
+    if (grafoMatriz.eh_bipartido()) {
+        std::cout << "O grafo é bipartido." << std::endl;
+    } else {
+        std::cout << "O grafo não é bipartido." << std::endl;
+    }
 
     grafoMatriz.imprime_grafo();
 

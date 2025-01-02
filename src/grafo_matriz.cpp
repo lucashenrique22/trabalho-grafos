@@ -10,8 +10,30 @@ GrafoMatriz::GrafoMatriz(int ordem, bool direcionado, bool peso_vertices, bool p
 GrafoMatriz::~GrafoMatriz() {}
 
 bool GrafoMatriz::eh_bipartido() const {
-    // Implementação inicial para checar bipartição
-    return false;
+    std::vector<int> cor(ordem, -1); // -1: não colorido, 0: cor 0, 1: cor 1
+
+    for (int inicio = 0; inicio < ordem; ++inicio) {
+        if (cor[inicio] == -1) { // Se o vértice não foi colorido
+            cor[inicio] = 0;
+            std::vector<int> fila;
+            fila.push_back(inicio);
+
+            while (!fila.empty()) {
+                int u = fila.back();
+                fila.pop_back();
+
+                for (int v = 0; v < ordem; ++v) {
+                    if (matriz[u][v] && cor[v] == -1) {
+                        cor[v] = 1 - cor[u];
+                        fila.push_back(v);
+                    } else if (matriz[u][v] && cor[v] == cor[u]) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
 
 int GrafoMatriz::n_conexo() const {
