@@ -10,35 +10,56 @@ GrafoMatriz::GrafoMatriz(int ordem, bool direcionado, bool peso_vertices, bool p
 GrafoMatriz::~GrafoMatriz() {}
 
 bool GrafoMatriz::eh_bipartido() const {
-    std::vector<int> cor(ordem, -1); // -1: não colorido, 0: cor 0, 1: cor 1
+    // Itera sobre todas as possíveis divisões dos vértices em dois conjuntos
+    for (int i = 0; i < (1 << ordem); ++i) {
+        std::vector<int> cor(ordem, -1);
+        // Atribui cores aos vértices com base na divisão atual
+        for (int j = 0; j < ordem; ++j) {
+            cor[j] = (i & (1 << j)) ? 1 : 0;
+        }
+        bool bipartido = true;
+        // Verifica se a divisão atual é válida (não há arestas entre vértices do mesmo conjunto)
+        for (int u = 0; u < ordem && bipartido; ++u) {
+            for (int v = 0; v < ordem; ++v) {
+                if (matriz[u][v] && cor[u] == cor[v]) {
+                    bipartido = false;
+                    break;
+                }
+            }
+        }
+        // Se encontrou uma divisão válida, retorna true
+        if (bipartido) return true;
+    }
+    // Se nenhuma divisão válida foi encontrada, retorna false
+    return false;
+}
 
-    for (int inicio = 0; inicio < ordem; ++inicio) {
-        if (cor[inicio] == -1) { // Se o vértice não foi colorido
-            cor[inicio] = 0;
+int GrafoMatriz::n_conexo() const {
+    std::vector<bool> visitado(ordem, false);
+    int qtdComponentes = 0;
+
+    for (int i = 0; i < ordem; ++i) {
+        if (!visitado[i]) {
+            ++qtdComponentes;
             std::vector<int> fila;
-            fila.push_back(inicio);
+            fila.push_back(i);
+            visitado[i] = true;
 
             while (!fila.empty()) {
                 int u = fila.back();
                 fila.pop_back();
 
                 for (int v = 0; v < ordem; ++v) {
-                    if (matriz[u][v] && cor[v] == -1) {
-                        cor[v] = 1 - cor[u];
+                    if (matriz[u][v] && !visitado[v]) {
                         fila.push_back(v);
-                    } else if (matriz[u][v] && cor[v] == cor[u]) {
-                        return false;
+                        visitado[v] = true;
                     }
                 }
             }
         }
     }
-    return true;
-}
 
-int GrafoMatriz::n_conexo() const {
-    // Implementação inicial para encontrar componentes conexas
-    return 1;
+    return qtdComponentes;
 }
 
 int GrafoMatriz::get_grau(int vertice) const {
@@ -59,12 +80,69 @@ bool GrafoMatriz::eh_completo() const {
 }
 
 bool GrafoMatriz::eh_arvore() const {
-    // Verificar se é conexo e não tem ciclos
+    
+    if(n_conexo() == 1 && !possui_ciclo()) { return true; }
     return false;
 }
 
+bool GrafoMatriz::possui_ciclo() const {
+    std::vector<bool> visitado(ordem, false);
+    std::vector<int> pilha(ordem, -1);
+
+    for (int i = 0; i < ordem; ++i) {
+        if (!visitado[i]) {
+            std::vector<int> fila;
+            fila.push_back(i);
+            visitado[i] = true;
+            pilha[i] = -1;
+
+            while (!fila.empty()) {
+                int u = fila.back();
+                fila.pop_back();
+
+                for (int v = 0; v < ordem; ++v) {
+                    if (matriz[u][v]) {
+                        if (!visitado[v]) {
+                            fila.push_back(v);
+                            visitado[v] = true;
+                            pilha[v] = u;
+                        } else if (pilha[u] != v) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
 bool GrafoMatriz::possui_articulacao() const {
-    // Implementação inicial para detectar articulação
+    for (int i = 0; i < ordem; ++i) {
+        std::vector<bool> visitado(ordem, false);
+        visitado[i] = true; // Remove o vértice i
+
+        int start = (i == 0) ? 1 : 0; // Encontra um vértice inicial diferente de i
+        std::vector<int> fila;
+        fila.push_back(start);
+        visitado[start] = true;
+
+        while (!fila.empty()) {
+            int u = fila.back();
+            fila.pop_back();
+
+            for (int v = 0; v < ordem; ++v) {
+                if (matriz[u][v] && !visitado[v]) {
+                    fila.push_back(v);
+                    visitado[v] = true;
+                }
+            }
+        }
+        // Verifica se todos os vértices foram visitados
+        for (int j = 0; j < ordem; ++j) {
+            if (!visitado[j]) return true;
+        }
+    }
     return false;
 }
 

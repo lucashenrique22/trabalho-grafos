@@ -34,6 +34,24 @@ int main() {
         std::cout << "O grafo não é bipartido." << std::endl;
     }
 
+    if (grafoMatriz.possui_articulacao()) {
+        std::cout << "O grafo possui articulação." << std::endl;
+    } else {
+        std::cout << "O grafo não possui articulação." << std::endl;
+    }
+
+    if(grafoMatriz.eh_arvore()) {
+        std::cout << "O grafo é uma árvore." << std::endl;
+    } else {
+        std::cout << "O grafo não é uma árvore." << std::endl;
+    }
+
+    if(grafoMatriz.eh_completo()) {
+        std::cout << "O grafo é completo." << std::endl;
+    } else {
+        std::cout << "O grafo não é completo." << std::endl;
+    }
+
     grafoMatriz.imprime_grafo();
 
     return 0;
