@@ -21,6 +21,8 @@ public:
     bool eh_arvore() const override;
     bool possui_articulacao() const override;
     bool possui_ponte() const override;
+    bool possui_ciclo_dfs(int u, std::vector<bool>& visitado, std::vector<int>& pai) const;
+    bool possui_ciclo() const;
     void carrega_grafo(const std::string& arquivo) override;
     void novo_grafo(const std::string& config) override;
     void imprime_grafo() const;

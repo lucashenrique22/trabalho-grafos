@@ -28,6 +28,20 @@ GrafoMatriz gerarGrafo(const std::string& file) {
 int main() {
     GrafoMatriz grafoMatriz = gerarGrafo("../grafo.txt");
 
+     grafoMatriz.imprime_grafo();
+
+    if(grafoMatriz.eh_direcionado()) {
+        std::cout << "O grafo é direcionado." << std::endl;
+    } else {
+        std::cout << "O grafo não é direcionado." << std::endl;
+    }
+
+    if(grafoMatriz.n_conexo()) {
+        std::cout << "O grafo é conexo." << std::endl;
+    } else {
+        std::cout << "O grafo não é conexo." << std::endl;
+    }
+    
     if (grafoMatriz.eh_bipartido()) {
         std::cout << "O grafo é bipartido." << std::endl;
     } else {
@@ -51,8 +65,5 @@ int main() {
     } else {
         std::cout << "O grafo não é completo." << std::endl;
     }
-
-    grafoMatriz.imprime_grafo();
-
     return 0;
 }
