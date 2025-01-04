@@ -1,11 +1,14 @@
 #include "../include/grafo_lista.h"
+#include "../include/lista_encadeada.h" 
 
 GrafoLista::GrafoLista(int ordem, bool direcionado, bool peso_vertices, bool peso_arestas)
     :ordem(ordem), direcionado(direcionado), peso_vertices(peso_vertices), peso_arestas(peso_arestas) {
-    lista.resize(ordem);
+    lista = new ListaEncadeada<No>(ordem); 
 }
 
-GrafoLista::~GrafoLista() {}
+GrafoLista::~GrafoLista() {
+    delete[] lista; 
+}
 
 bool GrafoLista::eh_bipartido() const {
     // Implementação inicial para checar bipartição
@@ -18,12 +21,12 @@ int GrafoLista::n_conexo() const {
 }
 
 int GrafoLista::get_grau(int vertice) const {
-    return lista[vertice].size();
+    return lista->get_elemento(vertice).getGrau(); // Supondo que sua classe de lista encadeada tenha um método tamanho()
 }
 
 bool GrafoLista::eh_completo() const {
     for (int i = 0; i < ordem; ++i) {
-        if (lista[i].size() != ordem - 1) return false;
+        if (lista->get_elemento(i).getGrau() != ordem - 1) return false; // Supondo que sua classe de lista encadeada tenha um método tamanho()
     }
     return true;
 }
@@ -46,13 +49,15 @@ bool GrafoLista::possui_ponte() const {
 void GrafoLista::carrega_grafo(const std::string& arquivo) {
     std::ifstream file(arquivo);
     if (!file.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo." << std::endl;
-        return;
+        std::cerr << "Erro ao abrir arquivo " << arquivo << std::endl;
+        exit(1);
     }
-    int u, v;
-    while (file >> u >> v) {
-        lista[u].push_back(v);
-        if (!direcionado) lista[v].push_back(u);
+
+    int vertice1, vertice2;
+    float peso;
+    while (file >> vertice1 >> vertice2 >> peso) {
+        lista->inserirComNo(vertice1);
+        lista->inserirComNo(vertice2);
     }
 }
 

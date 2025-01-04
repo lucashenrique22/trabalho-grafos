@@ -26,6 +26,7 @@ public:
     void carrega_grafo(const std::string& arquivo) override;
     void novo_grafo(const std::string& config) override;
     void imprime_grafo() const;
+    void dfs(std::vector<std::vector<int>> matriz, std::vector<bool>& visitado, int u) const;
 
 private:
     std::vector<std::vector<int>> matriz;

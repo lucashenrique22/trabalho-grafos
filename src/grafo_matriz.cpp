@@ -1,6 +1,7 @@
 #include "../include/grafo_matriz.h"
 #include <fstream>
 #include <iostream>
+using namespace std;
 
 GrafoMatriz::GrafoMatriz(int ordem, bool direcionado, bool peso_vertices, bool peso_arestas)
     : ordem(ordem), direcionado(direcionado), peso_vertices(peso_vertices), peso_arestas(peso_arestas) {
@@ -35,31 +36,25 @@ bool GrafoMatriz::eh_bipartido() const {
 }
 
 int GrafoMatriz::n_conexo() const {
-    std::vector<bool> visitado(ordem, false);
+    vector<bool> visitado(ordem, false);
     int qtdComponentes = 0;
-
     for (int i = 0; i < ordem; ++i) {
         if (!visitado[i]) {
+            dfs(matriz, visitado, i);
             ++qtdComponentes;
-            std::vector<int> fila;
-            fila.push_back(i);
-            visitado[i] = true;
+        }
+    }
+    return qtdComponentes;
+}
 
-            while (!fila.empty()) {
-                int u = fila.back();
-                fila.pop_back();
-
-                for (int v = 0; v < ordem; ++v) {
-                    if (matriz[u][v] && !visitado[v]) {
-                        fila.push_back(v);
-                        visitado[v] = true;
-                    }
-                }
-            }
+void GrafoMatriz::dfs(vector<vector<int>> matriz, vector<bool>& visitado, int u) const{
+    visitado[u] = true;
+    for (int v = 0; v < matriz.size(); ++v) {
+        if (matriz[u][v] && !visitado[v]) {
+            dfs(matriz, visitado, v);
         }
     }
 
-    return qtdComponentes;
 }
 
 int GrafoMatriz::get_grau(int vertice) const {
@@ -86,44 +81,53 @@ bool GrafoMatriz::eh_arvore() const {
 }
 
 bool GrafoMatriz::possui_ciclo() const {
-    std::vector<bool> visitado(ordem, false);
-    std::vector<int> pilha(ordem, -1);
+    vector<int> inDegree(ordem, 0);
 
-    for (int i = 0; i < ordem; ++i) {
-        if (!visitado[i]) {
-            std::vector<int> fila;
-            fila.push_back(i);
-            visitado[i] = true;
-            pilha[i] = -1;
-
-            while (!fila.empty()) {
-                int u = fila.back();
-                fila.pop_back();
-
-                for (int v = 0; v < ordem; ++v) {
-                    if (matriz[u][v]) {
-                        if (!visitado[v]) {
-                            fila.push_back(v);
-                            visitado[v] = true;
-                            pilha[v] = u;
-                        } else if (pilha[u] != v) {
-                            return true;
-                        }
-                    }
-                }
+    // Calcula o grau de entrada (in-degree) de cada vértice
+    for (int u = 0; u < ordem; ++u) {
+        for (int v = 0; v < ordem; ++v) {
+            if (matriz[u][v] == 1) {
+                inDegree[v]++;
             }
         }
     }
 
-    return false;
+    // Usa um vector como "fila"
+    vector<int> vec;
+    for (int i = 0; i < ordem; ++i) {
+        if (inDegree[i] == 0) {
+            vec.push_back(i); // Adiciona os vértices com grau de entrada 0
+        }
+    }
+
+    int index = 0; // Índice para simular remoção da "frente" da fila
+    int visitedCount = 0;
+
+    while (index < vec.size()) {
+        int node = vec[index]; // Pega o elemento da "frente"
+        index++;               // Avança o índice para a próxima posição
+        visitedCount++;
+
+        for (int v = 0; v < ordem; ++v) {
+            if (matriz[node][v] == 1) {
+                inDegree[v]--;
+                if (inDegree[v] == 0) {
+                    vec.push_back(v); // Adiciona à "fila"
+                }
+            }
+        }
+    }
+    // Se visitamos todos os vértices, o grafo é um DAG
+    return visitedCount == ordem;
 }
+
 bool GrafoMatriz::possui_articulacao() const {
     for (int i = 0; i < ordem; ++i) {
-        std::vector<bool> visitado(ordem, false);
+       vector<bool> visitado(ordem, false);
         visitado[i] = true; // Remove o vértice i
 
         int start = (i == 0) ? 1 : 0; // Encontra um vértice inicial diferente de i
-        std::vector<int> fila;
+       vector<int> fila;
         fila.push_back(start);
         visitado[start] = true;
 
@@ -151,16 +155,16 @@ bool GrafoMatriz::possui_ponte() const {
     return false;
 }
 
-void GrafoMatriz::carrega_grafo(const std::string& arquivo) {
-    std::ifstream file(arquivo);
+void GrafoMatriz::carrega_grafo(const string& arquivo) {
+   ifstream file(arquivo);
     if (!file.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo." << std::endl;
+       cerr << "Erro ao abrir o arquivo." <<endl;
         return;
     }
-    std::string line;
-    std::getline(file, line);
+   string line;
+   getline(file, line);
     if (peso_vertices) {
-        std::getline(file, line); 
+       getline(file, line); 
     }
     int u, v;
     if (peso_arestas) {
@@ -177,15 +181,15 @@ void GrafoMatriz::carrega_grafo(const std::string& arquivo) {
     }
 }
 
-void GrafoMatriz::novo_grafo(const std::string& config) {
+void GrafoMatriz::novo_grafo(const string& config) {
     // Gerar grafo aleatório com base na configuração
 }
 
 void GrafoMatriz::imprime_grafo() const {
     for (int i = 0; i < ordem; ++i) {
         for (int j = 0; j < ordem; ++j) {
-            std::cout << matriz[i][j] << " ";
+            cout << matriz[i][j] << " ";
         }
-        std::cout << std::endl;
+         cout << endl;
     }
 }

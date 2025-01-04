@@ -2,7 +2,7 @@
 #define GRAFO_LISTA_H
 
 #include "grafo.h"
-#include <list>
+#include "lista_encadeada.h" // Inclua o cabeçalho da sua classe de lista encadeada
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -27,11 +27,11 @@ public:
     void novo_grafo(const std::string& config) override;
 
 private:
-    std::vector<std::list<int>> lista;
-    int ordem;
-    bool direcionado;
+    ListaEncadeada <No>* lista; 
     bool peso_arestas;
     bool peso_vertices;
+    bool direcionado;
+    int ordem;
 };
 
 #endif // GRAFO_LISTA_H
