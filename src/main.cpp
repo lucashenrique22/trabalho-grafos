@@ -92,48 +92,25 @@ GrafoLista gerarGrafoLista(const string& file) {
     return grafo;
 }
 
-int main() {
-    // GrafoMatriz grafoMatriz = gerarGrafo("../grafo.txt");
-
-    //  grafoMatriz.imprime_grafo();
-
-    // if(grafoMatriz.eh_direcionado()) {
-    //     cout << "O grafo é direcionado." << endl;
-    // } else {
-    //     cout << "O grafo não é direcionado." << endl;
-    // }
-
-    // int qtdComponentes = grafoMatriz.n_conexo();
-    //     cout << qtdComponentes << endl;
+int main(int argc, char* argv[]) {
     
-    
-    // if (grafoMatriz.eh_bipartido()) {
-    //     cout << "O grafo é bipartido." << endl;
-    // } else {
-    //     cout << "O grafo não é bipartido." << endl;
-    // }
+    string arquivoGrafo = argv[3];
+    GrafoMatriz grafo = gerarGrafo(arquivoGrafo);
 
-    // if (grafoMatriz.possui_articulacao()) {
-    //     cout << "O grafo possui articulação." << endl;
-    // } else {
-    //     cout << "O grafo não possui articulação." << endl;
-    // }
+    // Imprimir propriedades do grafo
+    cout << "Grafo carregado de " << arquivoGrafo << ":\n";
 
-    // cout << grafoMatriz.possui_ciclo() << endl;
+    cout << "Grau: " << grafo.get_grau(0) << endl;
+    cout << "Ordem: " << grafo.get_ordem() << endl;
+    cout << "Direcionado: " << (grafo.eh_direcionado() ? "Sim" : "Não") << endl;
+    cout << "Componentes conexas: " << grafo.n_conexo() << endl;
+    cout << "Vertices ponderados: " << (grafo.vertice_ponderado() ? "Sim" : "Não") << endl;
+    cout << "Arestas ponderadas: " << (grafo.aresta_ponderada() ? "Sim" : "Não") << endl;
+    cout << "Completo: " << (grafo.eh_completo() ? "Sim" : "Não") << endl;
+    cout << "Bipartido: " << (grafo.eh_bipartido() ? "Sim" : "Não") << endl;
+    cout << "Arvore: " << (grafo.eh_arvore() ? "Sim" : "Não") << endl;
+    cout << "Aresta Ponte: " << (grafo.possui_ponte() ? "Sim" : "Não") << endl;
+    cout << "Vertice de Articulação: " << (grafo.possui_articulacao() ? "Sim" : "Não") << endl;
 
-    // if(grafoMatriz.eh_arvore()) {
-    //     cout << "O grafo é uma árvore." << endl;
-    // } else {
-    //     cout << "O grafo não é uma árvore." << endl;
-    // }
-
-    // if(grafoMatriz.eh_completo()) {
-    //     cout << "O grafo é completo." << endl;
-    // } else {
-    //     cout << "O grafo não é completo." << endl;
-    // }
-
-    GrafoLista grafoLista = gerarGrafoLista("../grafo.txt");
-     cout << "o grau do grafo eh: " << grafoLista.get_grau(0) << endl;
     return 0;
 }

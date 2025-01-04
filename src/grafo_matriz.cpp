@@ -183,6 +183,28 @@ void GrafoMatriz::carrega_grafo(const string& arquivo) {
 
 void GrafoMatriz::novo_grafo(const string& config) {
     // Gerar grafo aleatório com base na configuração
+    // Implementação inicial
+    cout << "Gerando novo grafo com configuração: " << config << endl;
+
+    // Limpa a matriz
+    for (int i = 0; i < ordem; ++i) {
+        for (int j = 0; j < ordem; ++j) {
+            matriz[i][j] = 0;
+        }
+    }
+
+    // Implementação inicial para gerar um grafo aleatório
+    srand(time(NULL));
+    for (int i = 0; i < ordem; ++i) {
+        for (int j = i + 1; j < ordem; ++j) {
+            matriz[i][j] = rand() % 2;
+            if (!direcionado) matriz[j][i] = matriz[i][j];
+        }
+    }
+
+    // Imprime o grafo gerado
+    
+    imprime_grafo();
 }
 
 void GrafoMatriz::imprime_grafo() const {
