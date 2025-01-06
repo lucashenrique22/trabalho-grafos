@@ -151,7 +151,35 @@ bool GrafoMatriz::possui_articulacao() const {
 }
 
 bool GrafoMatriz::possui_ponte() const {
-    // Implementação inicial para detectar ponte
+   
+   for (int u = 0; u < ordem; ++u) {
+        for (int v = 0; v < ordem; ++v) {
+            if (matriz[u][v] != 0) {
+                // Cria uma cópia da matriz
+                vector<vector<int>> matriz_copy = matriz;
+
+                // Remove a aresta (u, v) na cópia
+                int temp = matriz_copy[u][v];
+                matriz_copy[u][v] = 0;
+                if (!direcionado) matriz_copy[v][u] = 0;
+
+                // Verifica se o grafo ainda é conexo usando a cópia
+                vector<bool> visitado(ordem, false);
+                dfs(matriz_copy, visitado, (u == 0) ? 1 : 0);
+
+                // Se o grafo não é mais conexo, (u, v) é uma ponte
+                bool conexo = true;
+                for (int i = 0; i < ordem; ++i) {
+                    if (!visitado[i]) {
+                        conexo = false;
+                        break;
+                    }
+                }
+
+                if (!conexo) return true;
+            }
+        }
+    }
     return false;
 }
 
