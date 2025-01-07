@@ -210,10 +210,7 @@ void GrafoMatriz::carrega_grafo(const string& arquivo) {
 }
 
 void GrafoMatriz::novo_grafo(const string& config) {
-    // Gerar grafo aleatório com base na configuração
-    // Implementação inicial
-    cout << "Gerando novo grafo com configuração: " << config << endl;
-
+   
     // Limpa a matriz
     for (int i = 0; i < ordem; ++i) {
         for (int j = 0; j < ordem; ++j) {
@@ -230,16 +227,40 @@ void GrafoMatriz::novo_grafo(const string& config) {
         }
     }
 
-    // Imprime o grafo gerado
-    
-    imprime_grafo();
+    imprime_matriz();
 }
 
-void GrafoMatriz::imprime_grafo() const {
+void GrafoMatriz::exibe_propriedades() const {
+
+    cout << "Grau: " << get_grau(0) << endl;
+    cout << "Ordem: " << get_ordem() << endl;
+    cout << "Direcionado: " << (eh_direcionado() ? "Sim" : "Não") << endl;
+    cout << "Componentes conexas: " << n_conexo() << endl;
+    cout << "Vertices ponderados: " << (vertice_ponderado() ? "Sim" : "Não") << endl;
+    cout << "Arestas ponderadas: " << (aresta_ponderada() ? "Sim" : "Não") << endl;
+    cout << "Completo: " << (eh_completo() ? "Sim" : "Não") << endl;
+    cout << "Bipartido: " << (eh_bipartido() ? "Sim" : "Não") << endl;
+    cout << "Arvore: " << (eh_arvore() ? "Sim" : "Não") << endl;
+    cout << "Aresta Ponte: " << (possui_ponte() ? "Sim" : "Não") << endl;
+    cout << "Vertice de Articulação: " << (possui_articulacao() ? "Sim" : "Não") << endl;
+}
+
+void GrafoMatriz::imprime_matriz() const {
     for (int i = 0; i < ordem; ++i) {
         for (int j = 0; j < ordem; ++j) {
             cout << matriz[i][j] << " ";
         }
          cout << endl;
+    }
+}
+
+void GrafoMatriz::salva_grafo(ofstream& outFile) const{
+    outFile << ordem << " " << direcionado << " " << peso_vertices << " " << peso_arestas << endl;
+    for (int i = 0; i < ordem; ++i) {
+        for (int j = 0; j < ordem; ++j) {
+            if (matriz[i][j] != 0) {
+                outFile << i << " " << j << " " << matriz[i][j] << endl;
+            }
+        }
     }
 }

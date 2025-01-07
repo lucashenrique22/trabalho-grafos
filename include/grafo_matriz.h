@@ -4,6 +4,7 @@
 #include "grafo.h"
 #include <vector>
 #include <iostream>
+using namespace std;
 
 class GrafoMatriz : public Grafo {
 public:
@@ -21,15 +22,17 @@ public:
     bool eh_arvore() const override;
     bool possui_articulacao() const override;
     bool possui_ponte() const override;
-    bool possui_ciclo_dfs(int u, std::vector<bool>& visitado, std::vector<int>& pai) const;
+    bool possui_ciclo_dfs(int u, vector<bool>& visitado, vector<int>& pai) const;
     bool possui_ciclo() const;
-    void carrega_grafo(const std::string& arquivo) override;
-    void novo_grafo(const std::string& config) override;
-    void imprime_grafo() const;
-    void dfs(std::vector<std::vector<int>> matriz, std::vector<bool>& visitado, int u) const;
+    void carrega_grafo(const string& arquivo) override;
+    void novo_grafo(const string& config) override;
+    void exibe_propriedades() const;
+    void imprime_matriz() const;
+    void salva_grafo(ofstream& outFile) const;
+    void dfs(vector<vector<int>> matriz, vector<bool>& visitado, int u) const;
 
 private:
-    std::vector<std::vector<int>> matriz;
+    vector<vector<int>> matriz;
     int ordem;
     bool direcionado;
     bool peso_arestas;

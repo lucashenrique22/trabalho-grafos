@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+using namespace std;
 
 class Grafo {
 public:
@@ -19,8 +20,8 @@ public:
     virtual bool eh_arvore() const = 0;
     virtual bool possui_articulacao() const = 0;
     virtual bool possui_ponte() const = 0;
-    virtual void carrega_grafo(const std::string& arquivo) = 0;
-    virtual void novo_grafo(const std::string& config) = 0;
+    virtual void carrega_grafo(const string& arquivo) = 0;
+    virtual void novo_grafo(const string& config) = 0;
 
 protected:
     int ordem;
