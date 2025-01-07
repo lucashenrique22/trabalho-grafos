@@ -19,7 +19,11 @@ Certifique-se de que você tenha um compilador C++ instalado, como o **g++**.
 - Linha 2: Pesos dos vértices (opcional, dependendo do grafo)
 - Linhas seguintes: `origem destino peso`
 
-### 1. Imprime descrição do grafo após carregá-lo como matriz de adjacência:
+### 1. Imprime propriedades do grafo após carregá-lo como matriz de adjacência:
    ```bash
    g++ *.cpp -o main.out && ./main.out -d -m ../grafo.txt
+   ```
+### 2. Carrega um arquivo de descrição, cria um grafo aleatório na estrutura de matriz e salva em outro arquivo:
+   ```bash
+   g++ *.cpp -o main.out && ./main.out -c -m ../descricao.txt
    ```
